@@ -44,4 +44,10 @@ def create_app():
     app.register_blueprint(chat_bp)
     app.register_blueprint(media_bp)
 
+    # Initialize database and default admin (especially for production/Render)
+    with app.app_context():
+        from app.setup_default_admin import create_default_admin
+        db.create_all()
+        create_default_admin()
+
     return app
