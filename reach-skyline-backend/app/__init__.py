@@ -44,10 +44,15 @@ def create_app():
     app.register_blueprint(chat_bp)
     app.register_blueprint(media_bp)
 
-    # Initialize database and default admin (especially for production/Render)
+    # Initialize database and default admin safely
+    # We use a try-except block so that even if DB isn't ready, the app won't crash
     with app.app_context():
-        from app.setup_default_admin import create_default_admin
-        db.create_all()
-        create_default_admin()
+        try:
+            from app.setup_default_admin import create_default_admin
+            db.create_all()
+            create_default_admin()
+            print("✔ Database initialized and Admin checked.")
+        except Exception as e:
+            print(f"⚠ Database init warning: {str(e)}")
 
     return app
