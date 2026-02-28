@@ -8,13 +8,21 @@ load_dotenv(override=True)
 
 class Config:
     # ----------------------------------------
-    # DATABASE CONFIGURATION (MySQL Required)
+    # DATABASE CONFIGURATION
     # ----------------------------------------
-    # FORCING SQLITE FOR NOW
-    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'instance', 'dev.db')
+    # Try to build MySQL URI from env vars, fallback to SQLite for local dev
+    DB_USER = os.environ.get("DB_USER")
+    DB_PASS = os.environ.get("DB_PASSWORD")
+    DB_HOST = os.environ.get("DB_HOST", "localhost")
+    DB_PORT = os.environ.get("DB_PORT", "3306")
+    DB_NAME = os.environ.get("DB_NAME")
 
-
+    if DB_USER and DB_PASS and DB_NAME:
+        # Construct MySQL URI (using pymysql)
+        SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    else:
+        basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'instance', 'dev.db')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
