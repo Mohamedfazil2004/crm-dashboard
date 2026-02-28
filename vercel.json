@@ -2,11 +2,11 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://crm-dashboard-backend-fazil.onrender.com/api/:path*"
+            "destination": "https://crm-dashboard-fy8i.onrender.com/api/:path*"
         },
         {
             "source": "/socket.io/:path*",
-            "destination": "https://crm-dashboard-backend-fazil.onrender.com/socket.io/:path*"
+            "destination": "https://crm-dashboard-fy8i.onrender.com/socket.io/:path*"
         },
         {
             "source": "/((?!api|socket.io).*)",
