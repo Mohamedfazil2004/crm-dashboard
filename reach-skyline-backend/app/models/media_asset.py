@@ -14,7 +14,7 @@ class MediaAsset(db.Model):
     shoot_date = db.Column(db.Date)
     shoot_day = db.Column(db.Integer)  # e.g., Day 1, Day 2
     crew_member_id = db.Column(db.String(20), db.ForeignKey("employees.id"), nullable=True)
-    status = db.Column(db.Enum('RAW', 'REVIEWED', 'APPROVED'), default='RAW')
+    status = db.Column(db.Enum('RAW', 'REVIEWED', 'APPROVED', name='media_asset_status'), default='RAW')
     assigned_reviewer_id = db.Column(db.String(20), db.ForeignKey("employees.id"), nullable=True)
     meta_data = db.Column(db.JSON)  # Stores duration, resolution, etc.
     script_type = db.Column(db.String(50), index=True) # Social Media, Service Promotion, Testimonial, Educational, BTS

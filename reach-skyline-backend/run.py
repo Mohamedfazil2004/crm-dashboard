@@ -1,4 +1,6 @@
-# run.py
+import eventlet
+eventlet.monkey_patch()
+
 from app import create_app
 from app.extensions import db, socketio
 from app.setup_default_admin import create_default_admin
