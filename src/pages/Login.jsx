@@ -7,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -14,6 +15,7 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -59,7 +61,9 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Login catch block error:", err);
-      setError("Network error. Please ensure the backend is running at http://127.0.0.1:5000");
+      setError("Network error. Please ensure the backend server is reachable.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,6 +82,7 @@ const Login = () => {
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
+          disabled={loading}
         />
         <input
           type="password"
@@ -85,9 +90,10 @@ const Login = () => {
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
+          disabled={loading}
         />
-        <button type="submit" style={{ marginTop: '10px' }} disabled={!!success}>
-          {success ? 'Success!' : 'Login'}
+        <button type="submit" style={{ marginTop: '10px' }} disabled={loading || !!success}>
+          {loading ? 'Logging in...' : success ? 'Success!' : 'Login'}
         </button>
       </form>
     </div>
