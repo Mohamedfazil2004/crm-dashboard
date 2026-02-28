@@ -214,14 +214,14 @@ const ChatWindow = ({ task, currentUser, onClose, assignedEmployeeName }) => {
                                 {msg.attachment_path && (
                                     <div className="chat-file-attachment">
                                         {isImage(msg.attachment_path) ? (
-                                            <img src={`http://localhost:5000${msg.attachment_path}`} alt="attachment" className="chat-img-preview" />
+                                            <img src={`${msg.attachment_path}`} alt="attachment" className="chat-img-preview" />
                                         ) : (
                                             <div className="chat-file-info">
                                                 <FileText size={24} />
                                                 <span>File Attachment</span>
                                             </div>
                                         )}
-                                        <a href={`http://localhost:5000${msg.attachment_path}`} target="_blank" rel="noreferrer" className="chat-download-btn">
+                                        <a href={`${msg.attachment_path}`} target="_blank" rel="noreferrer" className="chat-download-btn">
                                             <Download size={16} /> Download
                                         </a>
                                     </div>

@@ -13,5 +13,7 @@ google-auth-oauthlib==1.2.0
 flask-socketio==5.3.6
 python-socketio==5.11.0
 python-engineio==4.9.0
-pip-system-certs  # In case of SSL issues in some environments
+pip-system-certs
+gunicorn
+eventlet
 

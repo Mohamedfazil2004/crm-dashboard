@@ -14,7 +14,7 @@ export const ChatProvider = ({ children }) => {
 
     useEffect(() => {
         if (token && user) {
-            const newSocket = io('http://localhost:5000', {
+            const newSocket = io({
                 auth: { token },
                 transports: ['websocket', 'polling']
             });

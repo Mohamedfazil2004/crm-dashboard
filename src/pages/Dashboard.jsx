@@ -138,7 +138,7 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem('access_token');
-      const res = await fetch('http://127.0.0.1:5000/api/clients', {
+      const res = await fetch('/api/clients', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('access_token');
       const deliverableKeys = ['Web', 'SEO', 'Campaign', 'Calls', 'Posters', 'Reels', 'Shorts', 'Longform', 'Carousel', 'EventDay', 'Blog'];
-      
+
       const currentRequirements = row.requirements || {};
       const updatedRequirements = { ...currentRequirements };
 
@@ -310,7 +310,7 @@ const Dashboard = () => {
       // Check if ALL checked services are now sent
       const checkedServices = deliverableKeys.filter(k => updatedRequirements[k] && updatedRequirements[k].checked);
       const allSent = checkedServices.every(k => updatedRequirements[k].isSent);
-      
+
       // Determine final status: 'Sent' hides it from dashboard, 'Pending' keeps it
       const finalStatus = allSent ? 'Sent' : 'Pending';
 
@@ -320,7 +320,7 @@ const Dashboard = () => {
       const combinedTeamsList = [...new Set([...existingTeams, ...newTeams])].filter(t => t);
       const combinedTeamsString = combinedTeamsList.join(', ');
 
-      const res = await fetch(`http://127.0.0.1:5000/api/clients/${row.clientID}`, {
+      const res = await fetch(`/api/clients/${row.clientID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
