@@ -3,8 +3,10 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-# Load .env file
-load_dotenv(override=True)
+# Load .env file only if it exists (for local development)
+# Do NOT use override=True so that Render's platform variables take precedence
+if os.path.exists(".env"):
+    load_dotenv()
 
 class Config:
     # ----------------------------------------
