@@ -554,7 +554,7 @@ const Dashboard = () => {
       </form>
 
       <div className="table-container">
-        <table style={{ minWidth: '1300px' }}>
+        <table className="client-req-table">
           <thead>
             <tr>
               <th style={{ width: '40px' }}>Sel</th>
@@ -573,7 +573,7 @@ const Dashboard = () => {
           </thead>
           <tbody>
             {tableRows.length === 0 ? (
-              <tr><td colSpan="12" style={{ textAlign: 'center', padding: '20px' }}>No Pending Client Requests</td></tr>
+              <tr><td colSpan="12" data-label="Status" style={{ textAlign: 'center', padding: '20px' }}>No Pending Client Requests</td></tr>
             ) : (
               tableRows.map((row, idx) => (
                 <ClientDeliverableRows
@@ -651,7 +651,7 @@ const ClientDeliverableRows = ({ row, onSend, isAdmin }) => {
         return (
           <tr key={`${row.clientID}-${type}`} style={{ borderBottom: isFirst && activeDeliverables.length > 1 ? 'none' : '1px solid #f1f1f1' }}>
             {/* Checkbox */}
-            <td>
+            <td data-label="Sel">
               <input
                 type="checkbox"
                 checked={state.checked}
@@ -662,12 +662,12 @@ const ClientDeliverableRows = ({ row, onSend, isAdmin }) => {
             </td>
 
             {/* Client Info */}
-            <td style={{ fontWeight: '600', color: isFirst ? '#007bff' : '#555' }}>
+            <td data-label="Client" style={{ fontWeight: '600', color: isFirst ? '#007bff' : '#555' }}>
               {isFirst ? row.clientName : <span style={{ color: '#ccc', fontSize: '12px' }}>(cont.)</span>}
             </td>
-            <td>{isFirst ? row.industry : ""}</td>
-            <td>{isFirst ? row.deliveryDate : ""}</td>
-            <td style={{ fontSize: '11px', textAlign: 'left' }}>
+            <td data-label="Industry">{isFirst ? row.industry : ""}</td>
+            <td data-label="Delivery Date">{isFirst ? row.deliveryDate : ""}</td>
+            <td data-label="Contact Info" style={{ fontSize: '11px', textAlign: 'left' }}>
               {isFirst && (
                 <>
                   <div>📞 {row.phone}</div>
@@ -677,16 +677,16 @@ const ClientDeliverableRows = ({ row, onSend, isAdmin }) => {
             </td>
 
             {/* Deliverable Data */}
-            <td style={{ fontWeight: '600', color: '#1a4f8a', background: '#fdfdff' }}>{deliverableLabels[type]}</td>
-            <td style={{ fontWeight: 'bold' }}>{item.count || 0}</td>
-            <td style={{ color: '#28a745', fontWeight: '600' }}>₹{item.amo || item.amount || 0}</td>
-            <td>{item.min || 0}</td>
-            <td style={{ maxWidth: '180px', fontSize: '11px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={item.description}>
+            <td data-label="Deliverable Type" style={{ fontWeight: '600', color: '#1a4f8a', background: '#fdfdff' }}>{deliverableLabels[type]}</td>
+            <td data-label="Count" style={{ fontWeight: 'bold' }}>{item.count || 0}</td>
+            <td data-label="Amount" style={{ color: '#28a745', fontWeight: '600' }}>₹{item.amo || item.amount || 0}</td>
+            <td data-label="Min">{item.min || 0}</td>
+            <td data-label="Description" style={{ maxWidth: '180px', fontSize: '11px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={item.description}>
               {item.description || '-'}
             </td>
 
             {/* Independent Assign To */}
-            <td style={{ minWidth: '150px' }}>
+            <td data-label="Assign To" style={{ minWidth: '150px' }}>
               <select
                 value={state.team}
                 onChange={(e) => !isAdmin && setRowTeam(type, e.target.value)}
@@ -695,7 +695,8 @@ const ClientDeliverableRows = ({ row, onSend, isAdmin }) => {
                   fontSize: '12px',
                   padding: '5px',
                   background: state.checked ? '#fff' : '#f2f2f2',
-                  border: state.checked ? '1px solid #007bff' : '1px solid #ccc'
+                  border: state.checked ? '1px solid #007bff' : '1px solid #ccc',
+                  width: '100%'
                 }}
               >
                 <option value="">Select Team</option>
@@ -708,7 +709,7 @@ const ClientDeliverableRows = ({ row, onSend, isAdmin }) => {
             </td>
 
             {/* Send Button */}
-            <td>
+            <td data-label="Action">
               {!isAdmin && !item.isSent && (
                 <button
                   onClick={() => handleSendRow(type)}

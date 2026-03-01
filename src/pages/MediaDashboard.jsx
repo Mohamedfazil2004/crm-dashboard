@@ -418,9 +418,9 @@ const MediaDashboard = () => {
                 </div>
 
                 {/* Main Layout: Media Grid + Script Panels */}
-                <div style={{ display: 'flex', gap: '30px', position: 'relative' }}>
+                <div className="media-dashboard-layout">
                     {/* Media Grid */}
-                    <div style={{ flex: '1', minWidth: 0 }}>
+                    <div className="media-dashboard-grid-container">
                         {!canDrag && (
                             <div style={{
                                 background: '#fef3c7',
@@ -751,18 +751,7 @@ const MediaCard = ({ asset, canDrag, isDragging, onPreview, getStatusColor }) =>
 // Script Panels Component
 const ScriptPanels = ({ scriptTypes, scriptCounts, selectedScript, onScriptClick, isDragging }) => {
     return (
-        <div style={{
-            width: '320px',
-            flexShrink: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            position: 'sticky',
-            top: '20px',
-            height: 'fit-content',
-            maxHeight: 'calc(100vh - 40px)',
-            overflowY: 'auto'
-        }}>
+        <div className="media-dashboard-sidebar">
             <h2 style={{
                 fontSize: '18px',
                 fontWeight: '700',
