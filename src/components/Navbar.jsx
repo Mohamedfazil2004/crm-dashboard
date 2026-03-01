@@ -7,13 +7,29 @@ const logo = "https://placehold.co/45x45/007bff/ffffff?text=Logo";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const location = useLocation();
   const { user, logout } = useAuth();
 
-  // Close dropdown when route changes
+  // Close menus when route changes
   useEffect(() => {
     setIsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsMobileDropdownOpen(false);
   }, [location]);
+
+  // Close mobile menu on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.target.closest('.navbar')) {
+        setIsMobileMenuOpen(false);
+        setIsMobileDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
 
   if (!user) return null;
 
@@ -35,7 +51,24 @@ const Navbar = () => {
           <span style={{ fontSize: '12px', marginLeft: '10px', color: '#ccc' }}>({role})</span>
         </div>
 
-        <nav>
+        {/* Hamburger Button (Mobile Only) */}
+        <button
+          className="hamburger-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+          }}
+          aria-label="Toggle navigation menu"
+        >
+          <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        {/* Desktop Nav */}
+        <nav className="desktop-nav">
           <ul className="nav-links">
 
             {/* 1. Admin Dashboard (Admin Only) */}
@@ -54,38 +87,27 @@ const Navbar = () => {
             )}
 
             {/* 3. Team Page Dropdown (Admin & Team Lead) */}
-            {/* Manager CANNOT see Team Pages */}
             {(isAdmin || isTeamLead) && (
               <li
                 className="dropdown"
                 onMouseEnter={() => setIsDropdownOpen(true)}
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
-                {/* Admin sees generic "Team Page", Team Lead checks strictly */}
                 <span className="dropbtn">Team Page ▾</span>
 
                 <ul className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
-                  {/* Branding */}
                   {(isAdmin || (isTeamLead && team === 'Branding')) && (
                     <li><Link to="/branding-team">Branding & Creatives</Link></li>
                   )}
-
-                  {/* Website */}
                   {(isAdmin || (isTeamLead && team === 'Website')) && (
                     <li><Link to="/website-team">Website Team</Link></li>
                   )}
-
-                  {/* SEO */}
                   {(isAdmin || (isTeamLead && team === 'SEO')) && (
                     <li><Link to="/seo-team">SEO Team</Link></li>
                   )}
-
-                  {/* Campaign */}
                   {(isAdmin || (isTeamLead && team === 'Campaign')) && (
                     <li><Link to="/campaign-team">Campaign Team</Link></li>
                   )}
-
-                  {/* Telecaller */}
                   {(isAdmin || (isTeamLead && team === 'Telecaller')) && (
                     <li><Link to="/telecaller-team">TELECALLER TEAM</Link></li>
                   )}
@@ -98,7 +120,7 @@ const Navbar = () => {
               <li><Link to="/team-members">Team Members</Link></li>
             )}
 
-            {/* Client Media Page (Admin, Manager, Team Lead) */}
+            {/* Client Media Page */}
             {(isAdmin || isManager || isTeamLead) && (
               <li><Link to="/client-media">Client Media</Link></li>
             )}
@@ -113,7 +135,7 @@ const Navbar = () => {
               <li><Link to="/media-hub">Media Hub</Link></li>
             )}
 
-            {/* Employee Profile Link (For Employees) */}
+            {/* Employee Profile Link */}
             {isEmployee && (
               <li><Link to={`/employee-profile/${user.id}`}>My Profile</Link></li>
             )}
@@ -126,6 +148,85 @@ const Navbar = () => {
                 onClick={logout}
               >
                 Logout
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Mobile Nav Overlay */}
+        <nav className={`mobile-nav ${isMobileMenuOpen ? 'mobile-nav--open' : ''}`}>
+          <ul className="mobile-nav-links">
+
+            {isAdmin && (
+              <li><Link to="/admin-dashboard">🏠 Admin Dashboard</Link></li>
+            )}
+
+            {(isAdmin || isManager) && (
+              <li><Link to="/dashboard">📋 Client Request</Link></li>
+            )}
+
+            {(isAdmin || isManager) && (
+              <li><Link to="/efficiency">📊 Efficiency Report</Link></li>
+            )}
+
+            {(isAdmin || isTeamLead) && (
+              <li>
+                <button
+                  className="mobile-dropdown-toggle"
+                  onClick={() => setIsMobileDropdownOpen(!isMobileDropdownOpen)}
+                >
+                  <span>👥 Team Page</span>
+                  <span className={`arrow ${isMobileDropdownOpen ? 'up' : ''}`}>▾</span>
+                </button>
+                {isMobileDropdownOpen && (
+                  <ul className="mobile-sub-menu">
+                    {(isAdmin || (isTeamLead && team === 'Branding')) && (
+                      <li><Link to="/branding-team">Branding & Creatives</Link></li>
+                    )}
+                    {(isAdmin || (isTeamLead && team === 'Website')) && (
+                      <li><Link to="/website-team">Website Team</Link></li>
+                    )}
+                    {(isAdmin || (isTeamLead && team === 'SEO')) && (
+                      <li><Link to="/seo-team">SEO Team</Link></li>
+                    )}
+                    {(isAdmin || (isTeamLead && team === 'Campaign')) && (
+                      <li><Link to="/campaign-team">Campaign Team</Link></li>
+                    )}
+                    {(isAdmin || (isTeamLead && team === 'Telecaller')) && (
+                      <li><Link to="/telecaller-team">Telecaller Team</Link></li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
+
+            {!isEmployee && (
+              <li><Link to="/team-members">👤 Team Members</Link></li>
+            )}
+
+            {(isAdmin || isManager || isTeamLead) && (
+              <li><Link to="/client-media">🖼️ Client Media</Link></li>
+            )}
+
+            {(isAdmin || isManager) && (
+              <li><Link to="/client-page">📁 Client Page</Link></li>
+            )}
+
+            {(isAdmin || isManager) && (
+              <li><Link to="/media-hub">🎬 Media Hub</Link></li>
+            )}
+
+            {isEmployee && (
+              <li><Link to={`/employee-profile/${user.id}`}>👤 My Profile</Link></li>
+            )}
+
+            <li>
+              <Link
+                to="/login"
+                className="mobile-logout-link"
+                onClick={logout}
+              >
+                🚪 Logout
               </Link>
             </li>
           </ul>
